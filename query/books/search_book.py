@@ -3,15 +3,15 @@ def search_book_query(db_conn, title, description, category_id, page):
     if title is not None or description is not None or category_id is not None:
         query += " WHERE "
         if title is not None:
-            query += f"title LIKES '{title}'"
+            query += f"title LIKE '%{title}%'"
             if description is not None or category_id is not None:
                 query += " AND "
         if description is not None:
-            query += f"description LIKES '{description}'"
+            query += f"description LIKE '%{description}%'"
             if category_id is not None:
                 query += " AND "
         if category_id is not None:
-            query += f"category_id={category_id}"
+            query += f"category_id='{category_id}'"
     if (page != None):
         query += f" LIMIT 10 OFFSET {(page-1)*10}"
     else:
