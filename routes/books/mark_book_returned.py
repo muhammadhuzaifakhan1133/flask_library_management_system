@@ -1,13 +1,14 @@
 from flask import Blueprint, request
 from db import db
 from controllers.books import mark_book_returned as MarkBookReturned
-from services.token_services import token_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 mark_book_returned_bp = Blueprint("mark-book-return", "user_service")
 
 @mark_book_returned_bp.route("/mark-book-return", methods=["PUT"])
-@token_required
-def mark_book_returned_route(decoded_data):
+@jwt_required()
+def mark_book_returned_route():
+    decoded_data = get_jwt_identity()
     if (decoded_data["type"] != "ADMIN"):
         return {"error": {"message": "Unauthenticated user"}}, 400
     if not request.is_json:

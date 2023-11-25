@@ -1,13 +1,14 @@
 from flask import Blueprint, request
 from db import db
 from controllers.books import add_book as AddBook
-from services.token_services import token_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 add_book_bp = Blueprint("add_book", "user_service")
 
 @add_book_bp.route("/add-book", methods=["POST"])
-@token_required
-def add_book_route(decoded_data):
+@jwt_required()
+def add_book_route():
+    decoded_data = get_jwt_identity()
     if (decoded_data["type"] != "ADMIN"):
         return {"error": {"message": "Unauthenticated user"}}, 400
     if not request.is_json:

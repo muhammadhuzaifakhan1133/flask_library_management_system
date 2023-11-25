@@ -1,13 +1,13 @@
 from flask import Blueprint, request
 from db import db
 from controllers.books import search_book as SearchBook
-from services.token_services import token_required
+from flask_jwt_extended import jwt_required
 
 search_book_bp = Blueprint("search_book", "user_service")
 
 @search_book_bp.route("/search-book", methods=["GET"])
-@token_required
-def search_book_route(decoded_data):
+@jwt_required()
+def search_book_route():
     if not request.is_json:
         return {
             "error": {

@@ -4,3 +4,4 @@ pyjwt
 pycryptodome
 cryptography
 pytest
+flask-jwt-extended

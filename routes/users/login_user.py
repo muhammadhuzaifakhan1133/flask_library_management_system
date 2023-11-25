@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from db import db
 from controllers.users import login_user as LoginUser
 from services import token_services
+from flask_jwt_extended import create_access_token
 
 login_user_bp = Blueprint("login_user", "user_service")
 
@@ -29,7 +30,7 @@ def login_user_route():
     if (userId != None):
         return {
             "message": "user login successfully",
-            "token": token_services.enrypt(userId["id"], data.get("user_type"))
+            "token": create_access_token(identity={"id":userId["id"], "type":data.get("user_type")})
         }, 200
     else:
         return {

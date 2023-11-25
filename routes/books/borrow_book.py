@@ -1,13 +1,14 @@
 from flask import Blueprint, request
 from db import db
 from controllers.books import borrow_book as BorrowBook
-from services.token_services import token_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 borrow_book_bp = Blueprint("borrow_book", "user_service")
 
 @borrow_book_bp.route("/borrow-book", methods=["POST"])
-@token_required
-def borrow_book_route(decoded_data):
+@jwt_required()
+def borrow_book_route():
+    decoded_data = get_jwt_identity()
     if not request.is_json:
         return {
             "error": {
