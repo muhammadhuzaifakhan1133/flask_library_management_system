@@ -6,14 +6,14 @@ CREATE TABLE user (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     email VARCHAR(45) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    user_type ENUM("ADMIN", "CUSTOMER"),
+    user_type ENUM("ADMIN", "CUSTOMER") NOT NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS book_category;
 CREATE TABLE book_category (
-	id INT UNSIGNED NOT NULL,
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(45) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (id)
@@ -26,17 +26,19 @@ CREATE TABLE book (
     description TEXT NOT NULL,
     category_id INT UNSIGNED NOT NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
-    quantity INT UNSIGNED NOT NULL DEFAULT 0,
-    status ENUM("AVAILABLE", "NOT AVAILABLE"),
+    book_status ENUM("AVAILABLE", "NOT AVAILABLE") DEFAULT "AVAILABLE",
     PRIMARY KEY (id),
     CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES book_category(id)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS book_borrow;
 CREATE TABLE book_borrow (
 	id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
     book_id INT UNSIGNED NOT NULL,
-    status ENUM("ACCEPT", "REJECT", "PENDING"),
+    from_date DATE NOT NULL,
+    to_date DATE NOT NULL,
+    borrow_status ENUM("ACCEPT", "REJECT", "PENDING") DEFAULT "PENDING",
     checked_by INT UNSIGNED  NULL,
     checked_time DATETIME NULL,
     created_at DATETIME NOT NULL DEFAULT NOW(),
