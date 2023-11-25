@@ -3,3 +3,4 @@ pymysql
 pyjwt
 pycryptodome
 cryptography
+pytest
